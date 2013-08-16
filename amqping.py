@@ -13,8 +13,8 @@ def main():
     parser.add_argument('-u', '--user')
     parser.add_argument('-p', '--password')
     parser.add_argument('-v', '--vhost')
-    parser.add_argument('-H', '--host', default="localhost")
-    parser.add_argument('-P', '--port', default=5672, type=int)
+    parser.add_argument('-H', '--host', default="localhost", help="Defaults to localhost")
+    parser.add_argument('-P', '--port', default=5672, type=int, help="Defaults to 5672")
     options = parser.parse_args()
     amqp_connect(options.user, options.password, options.vhost, options.host, options.port)
 

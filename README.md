@@ -3,7 +3,21 @@ amqping
 
 Simple script for testing if an AMQP server is up and credentials are valid.
 
-## Example Usage
+## Options
+```bash
+user@chefserver2:~# python amqping.py --help
+usage: amqping.py [-h] [-u USER] [-p PASSWORD] [-v VHOST] [-H HOST] [-P PORT]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -u USER, --user USER
+  -p PASSWORD, --password PASSWORD
+  -v VHOST, --vhost VHOST
+  -H HOST, --host HOST  Defaults to localhost
+  -P PORT, --port PORT  Defaults to 5672
+```
+
+## Examples
 ```bash
 user@chefserver2:~# python amqping.py -u chef -v chef -p $CHEF_RMQ_PW
 Successfully opened AMQP connection.
