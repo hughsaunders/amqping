@@ -1,51 +1,36 @@
-amqping
-=======
+# AMQPing
+Amqping is a simple utility for testing AMQP functions.
+it can connect to an amqp instance, post and consume test messages,
+count & purge queues.
 
-Simple script for testing if an AMQP server is up and credentials are valid.
 
-## Options
-```bash
-user@chefserver2:~# python amqping.py --help
-usage: amqping.py [-h] [-u USER] [-p PASSWORD] [-v VHOST] [-H HOST] [-P PORT]
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -u USER, --user USER
-  -p PASSWORD, --password PASSWORD
-  -v VHOST, --vhost VHOST
-  -H HOST, --host HOST  Defaults to localhost
-  -P PORT, --port PORT  Defaults to 5672
+Ping and cleanup example:
+```
+   $ amqping myuser mypass myhost ping cleanup
+   Succesfully connected to broker at amqp://myhost:5672/
+   Created exchange:testexchange and queue:testqueue
+   Succesfully posted and consumed a test message
+   Removed queue:testqueue and exchange:testexchange
 ```
 
-## Examples
-```bash
-user@chefserver2:~# python amqping.py -u chef -v chef -p $CHEF_RMQ_PW
-Successfully opened AMQP connection.
 
-user@chefserver2:~# python amqping.py -u chef -v chef -p incorrect_password
-No handlers could be found for logger "pika.adapters.base_connection"
-Traceback (most recent call last):
-  File "amqping.py", line 44, in <module>
-    main()
-  File "amqping.py", line 19, in main
-    amqp_connect(options.user, options.password, options.vhost, options.host, options.port)
-  File "amqping.py", line 30, in amqp_connect
-    connection.ioloop.start()
-  File "/usr/local/lib/python2.7/dist-packages/pika/adapters/select_connection.py", line 136, in start
-    self.poller.start()
-  File "/usr/local/lib/python2.7/dist-packages/pika/adapters/select_connection.py", line 424, in start
-    self.poll()
-  File "/usr/local/lib/python2.7/dist-packages/pika/adapters/select_connection.py", line 479, in poll
-    self._handler(fileno, event, write_only=write_only)
-  File "/usr/local/lib/python2.7/dist-packages/pika/adapters/base_connection.py", line 302, in _handle_events
-    self._handle_read()
-  File "/usr/local/lib/python2.7/dist-packages/pika/adapters/base_connection.py", line 323, in _handle_read
-    return self._handle_disconnect()
-  File "/usr/local/lib/python2.7/dist-packages/pika/adapters/base_connection.py", line 231, in _handle_disconnect
-    self._adapter_disconnect()
-  File "/usr/local/lib/python2.7/dist-packages/pika/adapters/base_connection.py", line 122, in _adapter_disconnect
-    self._check_state_on_disconnect()
-  File "/usr/local/lib/python2.7/dist-packages/pika/adapters/base_connection.py", line 138, in _check_state_on_disconnect
-    raise exceptions.ProbableAuthenticationError
-pika.exceptions.ProbableAuthenticationError
+ Command chaining example:
+```
+   $ amqping usr pass host ping mcount post --messages 10000 mcount purge mcount cleanup
+   HEAD is now at 27edfa3 Restructured around click
+   Succesfully connected to broker at amqp://host:5672/
+   Created exchange:testexchange and queue:testqueue
+   Succesfully posted and consumed a test message
+   There are 0 messages in queue:testqueue
+   Posted 10000 messages to exchange:testexchange with routing key:testkey
+   There are 10000 messages in queue:testqueue
+   Purged messages from queue:testqueue
+   There are 0 messages in queue:testqueue
+   Removed queue:testqueue and exchange:testexchange
+```
+
+Note that general options must be placed at the beginning of the command line
+For example:
+```
+   amqping --vhost /foo user pass host ping
 ```
