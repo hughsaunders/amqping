@@ -34,3 +34,25 @@ For example:
 ```
    amqping --vhost /foo user pass host ping
 ```
+
+Usage:
+```
+root@rpc-partition:~/amqping# amqping
+Usage: amqping [OPTIONS] USER PASSWORD HOST COMMAND1 [ARGS]... [COMMAND2
+               [ARGS]...]...
+
+Options:
+  --port INTEGER
+  --vhost TEXT
+  --queue TEXT
+  --exchange TEXT
+  --routingkey TEXT
+  --help             Show this message and exit.
+
+Commands:
+  cleanup  Remove test exchange and queue
+  mcount   Print message count for specified queue
+  ping     Connect to broker, create and delete test...
+  post     Post a series of test messgaes
+  purge    Purge a queue (remove all messages)
+```
