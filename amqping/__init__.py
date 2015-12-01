@@ -23,7 +23,6 @@ import sys
 import click
 import pika
 
-
 def setup_broker_resources(ctx):
     # connect to broker
     try:
@@ -69,7 +68,7 @@ def setup_broker_resources(ctx):
 
 
 # Cli group stores options and args common to all commands.
-@click.group(chain=True)
+@click.group(chain=True, context_settings=dict(auto_envvar_prefix='amqping'))
 @click.argument('user')
 @click.argument('password')
 @click.argument('host')
