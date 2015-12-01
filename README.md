@@ -47,7 +47,8 @@ Options:
   --queue TEXT
   --exchange TEXT
   --routingkey TEXT
-  --help             Show this message and exit.
+  --exchangetype TEXT
+  --help               Show this message and exit.
 
 Commands:
   cleanup  Remove test exchange and queue
