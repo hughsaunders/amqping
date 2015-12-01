@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from pip.req import parse_requirements
 
 setup(name='amqping',
-      version=0.3,
+      version=0.4,
       description=('simple package/command for tesitng if an amqp instance is'
                    ' responding'),
       author='Hugh Saunders',

@@ -42,7 +42,8 @@ def setup_broker_resources(ctx):
                       vhost=ctx.obj['vhost']))
 
         # create resources
-        channel.exchange_declare(exchange=ctx.obj['exchange'])
+        channel.exchange_declare(exchange=ctx.obj['exchange'],
+                                 exchange_type=ctx.obj['exchange_type'])
         channel.queue_declare(queue=ctx.obj['queue'])
         channel.queue_bind(queue=ctx.obj['queue'],
                            exchange=ctx.obj['exchange'],
@@ -59,6 +60,11 @@ def setup_broker_resources(ctx):
         print("Got access denied, did you specify the right vhost?")
     except pika.exceptions.ProbableAuthenticationError:
         print("Got Authentication Error, check your username and password")
+    except pika.exceptions.ChannelClosed as e:
+        print("Exchange type mismatch - exchange already exists but its type"
+              " does not match '%(etype)s'. Try specifying --exchangetype."
+              " Error details: %(e)s"
+              % dict(etype=ctx.obj['exchange_type'], e=e))
     sys.exit(1)
 
 
@@ -72,8 +78,18 @@ def setup_broker_resources(ctx):
 @click.option('--queue', default='testqueue')
 @click.option('--exchange', default='testexchange')
 @click.option('--routingkey', default='testkey')
+@click.option('--exchangetype', default='topic')
 @click.pass_context
-def cli(ctx, user, password, host, port, vhost, queue, exchange, routingkey):
+def cli(ctx,
+        user,
+        password,
+        host,
+        port,
+        vhost,
+        queue,
+        exchange,
+        routingkey,
+        exchangetype):
     ctx.obj['user'] = user
     ctx.obj['password'] = password
     ctx.obj['host'] = host
@@ -82,6 +98,7 @@ def cli(ctx, user, password, host, port, vhost, queue, exchange, routingkey):
     ctx.obj['queue'] = queue
     ctx.obj['exchange'] = exchange
     ctx.obj['routing_key'] = routingkey
+    ctx.obj['exchange_type'] = exchangetype
     ctx.obj['channel'] = setup_broker_resources(ctx)
 
 
